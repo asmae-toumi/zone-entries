@@ -1,4 +1,3 @@
-This repository contains data and code related to a project on zone entries in the NHL.
 
 ## Code
 
