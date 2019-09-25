@@ -6,7 +6,7 @@ This repository contains data and code related to a project on zone entries in t
 - points dataset containing goal rates from Evolving-Hockey
 - RAPM dataset containing RAPM metrics from Evolving-Hockey
 
-*Please note proprietary tracking data from Stathletes is not included*
+*Please note that the proprietary tracking data from Stathletes is not included*
 
 ## Data
 
