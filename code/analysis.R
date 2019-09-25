@@ -1,10 +1,10 @@
-#####################
+###################################
 
 ## ----------------------------- ##
 ##   Analysis + Initial Charts   ##
 ## ----------------------------- ##
 
-########################
+###################################
 
 # Required libraries
 library(tidyverse)
@@ -90,7 +90,7 @@ df_zone_adj %>%
   geom_density_2d() + 
   labs(title = "Location of entry")
 
-#####################
+########################
 
 ## ---------------- ##
 ##   Outcomes       ##
@@ -180,13 +180,13 @@ df_RAPM <- df_RAPM %>% rename(Position_twins = position)
 # left join df_zone to Points df by season and Entry.Player
 df_zone_adj <- left_join(df_zone_adj, df_RAPM, by = c("season", "Entry.Player"))
 
-#####################
+##################################
 
 ## ---------------------------- ##
 ##   Propensity Score Matching  ##
 ## ---------------------------- ##
 
-########################
+##################################
 
 ### PROPENSITY SCORE MODEL ###
 
