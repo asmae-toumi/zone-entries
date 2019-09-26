@@ -53,7 +53,7 @@ library("Matching")
 Previous research in the National Hockey League has suggested that teams’ decisions to gain the offensive zone with puck possession (“carry-ins”) is preferred over dumping the puck in and chasing after it (“dump-ins”). However, standard comparisons of zone entry strategy are confounded by factors such as offensive and defensive talent, location on the ice, and shift time, each of which impact player choice. Indeed, contrasting carry-ins to dump-ins isn’t exactly an apples-to-apples comparison; instead, it is more like studying grapes versus prunes. Using two matching methods – propensity score matching and Bayesian additive regression trees – we leverage player-tracking data to estimate the causal benefits due to zone-entry decisions. Both approaches better account for the variables that affect entry choice. We also highlight the wide-ranging potential of the causal inference framework with player tracking data in sports while emphasizing the challenges of using standard statistical methods to inform decision-making in the presence of substantial confounding. 
 
 <aside>
-This abstract submitted to the 2019 New England Symposium of Statistics. It's found in their program: http://nessis.org/program.pdf
+This abstract was submitted to the 2019 New England Symposium of Statistics. It's found in their program: http://nessis.org/program.pdf
 </aside>
 
 ## Introduction 
@@ -149,20 +149,20 @@ Compared to propensity score matching, BART yielded a similar ATT estimate of  `
 | Forward       | 0.0211   | 0.0000134 |
 | Defenseman    | 0.0171   | 0.0000296 | 
 
-There appears to be no association between Goals plus-minus per 60 minutes and position of entry player as shown in the figure below. The difference between carrying it in and dumping it appears to be the same for players of different skill level.
+There appears to be no association between Goals plus-minus per 60 minutes and position of entry player as shown in the figure below. The difference between carrying it in and dumping it appears to be the same for players of different skill level:
 
 ```{r echo=FALSE, fig.cap="Conditional Average Treatment effect on the Treated (CATT) for entry player's position. The solid lines represent the true treatment effect as it varies with X. The dotted lines represent the marginal 95% posterior intervals for the treatment effect at each X value from a treated observation.", out.width = '100%'}
 knitr::include_graphics('/Users/atoumi/Dropbox (Personal)/zone-entries-nhl/figs/CATT_pos.png')
 
 ```
 
-In the figure below, there was also no observable difference between causal estimates by score differential, game seconds left or shift length. We see that the marginal 95% posterior intervals -- represented by the dotted lines -- cover the true CATT's well. The exception is for  `game_seconds`  above 3000 seconds where no overlap exists.
+In the figure below, there was also no observable difference between causal estimates by score differential, game seconds left or shift length. We see that the marginal 95% posterior intervals -- represented by the dotted lines -- cover the true CATT's well. The exception is for  `game_seconds`  above 3000 seconds where no overlap exists:
 
 ```{r echo=FALSE, fig.cap="Conditional Average Treatment effect on the Treated (CATT) for different covariates. The solid lines represent the true treatment effect as it varies with X. The dotted lines represent the marginal 95% posterior intervals for the treatment effect at each X value from a treated observation.", out.width = '100%'}
 knitr::include_graphics('/Users/atoumi/Dropbox (Personal)/zone-entries-nhl/figs/CATT_covs.png')
 ```
 
-We note the important improvement in the ATT of carry-ins with y-coordinates over 60 feet. It appears that zone entries attempted near center ice are better than the ones attempted near the boards. This is reflected in the spatial plot below, showing that entries attempted near center ice are better than the ones attempted near the boards.
+We note the important improvement in the ATT of carry-ins with y-coordinates over 60 feet. It appears that zone entries attempted near center ice are better than the ones attempted near the boards. This is reflected in the spatial plot below, showing that entries attempted near center ice are better than the ones attempted near the boards:
 
 
 ```{r echo=FALSE, fig.cap="Spatial plot.", out.width = '100%'}
