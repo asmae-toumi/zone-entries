@@ -11,9 +11,11 @@ author:
   name: Michael Lopez
   url: https://statsbylopez.netlify.com
 date: '2019-09-28'
-output:
+description: XXXXXXX
+  output:
   distill::distill_article:
     toc: yes
+    self_contained: false
   bookdown::word_document2: default 
   html_document:
     df_print: paged
