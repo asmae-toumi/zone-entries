@@ -1975,13 +1975,14 @@ distill-header .nav a {
 <li><a href="#acknowledgments">Acknowledgments</a></li>
 <li><a href="#references">References</a></li>
 <li><a href="#reuse">Reuse</a></li>
+<li><a href="#corrections">Corrections</a></li>
 </ul>
 </nav>
 <hr class="d-toc-separator" />
 <h2 id="abstract">Abstract</h2>
 <p>Previous research in the National Hockey League has suggested that teams’ decisions to gain the offensive zone with puck possession (“carry-ins”) is preferred over dumping the puck in and chasing after it (“dump-ins”). However, standard comparisons of zone entry strategy are confounded by factors such as offensive and defensive talent, location on the ice, and shift time, each of which impact player choice. Indeed, contrasting carry-ins to dump-ins isn’t exactly an apples-to-apples comparison; instead, it is more like studying grapes versus prunes. Using two matching methods – propensity score matching and Bayesian additive regression trees – we leverage player-tracking data to estimate the causal benefits due to zone-entry decisions. Both approaches better account for the variables that affect entry choice. We also highlight the wide-ranging potential of the causal inference framework with player tracking data in sports while emphasizing the challenges of using standard statistical methods to inform decision-making in the presence of substantial confounding.</p>
 <aside>
-This abstract was the one submitted to the 2019 New England Symposium of Statistics and that is found in their conference program: <a href="http://nessis.org/program.pdf" class="uri">http://nessis.org/program.pdf</a>
+This abstract submitted to the 2019 New England Symposium of Statistics. It’s found in their program: <a href="http://nessis.org/program.pdf" class="uri">http://nessis.org/program.pdf</a>
 </aside>
 <h2 id="introduction">Introduction</h2>
 <p>In hockey, players can enter the offensive zone by either carrying the puck in or dumping it. This decision is typically made by the player or their head coach. This decision is informed by, among other factors, offensive and defensive talent, location on the ice, shift time, time left in the game and score differential.</p>
@@ -2143,7 +2144,7 @@ Figure 4: Spatial plot.
 </div>
 </div>
 <h2 id="limitations">Limitations</h2>
-<p>To produce meaningful inferences on zone entry decision-making, we considered many confounders that influence zone entry decision-making, such as score differential, time left on the clock, entry player skill and entry player location. One coufounder that we did not have access to is the location of all the other players on the ice, especially that of opposing players. It is our hope that in the future we can expand our study to include this important confounder and others that might be related to zone entry decision-making.</p>
+<p>To produce meaningful inferences on zone entry decision-making, we considered many confounders such as score differential, time left on the clock, entry player skill and entry player location. One coufounder that we did not have access to is the location of all the other players on the ice, especially that of opposing players. It is our hope that in the future we can expand our study to include this important confounder and others that might be related to zone entry decision-making.</p>
 <h2 id="code-and-data">Code and data</h2>
 <p>Although we cannot share the tracking data, our entire analysis plan is available on Github in our public repository. This includes publicly available data like the NHL pbp and Evolving-Hockey data as well as code for all of our data wrangling, analysis and visualizations.</p>
 <p>Please consult <a href="https://github.com/asmae-toumi/zone-entries" class="uri">https://github.com/asmae-toumi/zone-entries</a> for the code, data, figures and relevant literature.</p>
@@ -2153,6 +2154,8 @@ Figure 4: Spatial plot.
 <p>Please see <code>manuscripts</code> folder in <a href="https://github.com/asmae-toumi/zone-entries" class="uri">https://github.com/asmae-toumi/zone-entries</a></p>
 <h2 id="reuse" class="appendix">Reuse</h2>
 <p>Source code for this document is available at <a href="https://github.com/asmae-toumi/zone-entries" class="uri">https://github.com/asmae-toumi/zone-entries</a>.</p>
+<h2 id="corrections" class="appendix">Corrections</h2>
+<p>If you see mistakes or want to suggest changes, please create an issue on the source repository.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
