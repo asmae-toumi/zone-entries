@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/532444/5d5431433f8c4e868685bda947e6b5c1
+bundleId: https://api.rpubs.com/api/v1/document/532444/5d5431433f8c4e868685bda947e6b5c1
+url: http://rpubs.com/atoumi/532444
+when: 1569587222.86936
