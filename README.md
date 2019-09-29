@@ -1,5 +1,5 @@
 
-## Code
+## Data
 
 `data` folder contains:
 - points dataset containing goal rates from Evolving-Hockey
@@ -7,7 +7,7 @@
 
 *Please note that the proprietary tracking data from Stathletes is not included*
 
-## Data
+## Code
 
 `code` folder contains:
 - `data_prep.R` script that readies dataset for analysis
@@ -26,3 +26,5 @@ This folder contains important figures and results.
 ## Presentation
 
 This folder contains the poster presented at the 2019 New England Symposium on Statistics in Sports, Boston, MA.
+
+Please see Summary.Rmd file for the code generating this page: http://rpubs.com/atoumi/zone-entries-nhl
