@@ -543,4 +543,241 @@ spatial_plot
 ggsave("spatial_plot.png")
 
 
+### TEAM-LEVEL TREATMENT EFFECTS ###
 
+# entry team distribution of ATT
+
+team_vector <- c(unique(df_zone_adj_model$Entry.Team))
+summary_table <- NULL
+df_team_i <- NULL
+df_team_all <- NULL
+
+for(i in 1:length(team_vector)) {
+  
+  df_bart <- df_zone_adj_model %>%
+    filter(Entry.Team == team_vector[i]) %>%
+    filter(!is.na(GPM_60)) 
+  
+  trt <- df_bart$is_carry    
+  
+  ## x variables are the ones we want to condition on. Factors instead of characters
+  xa <- df_bart %>% 
+    mutate(is_defender = as.numeric(Position == "Defenseman")) %>% 
+    dplyr::select(is_defender, GPM_60, score_diff, length_of_shift, 
+                  game_seconds, x_entry, y_entry) 
+  
+  ## outcome variable
+  ya <- df_bart$xg_30_net 
+  
+  ## combining treatment variable with x
+  xat = cbind(trt, xa) 
+  
+  ## among all entries, select carry-ins
+  xap1 = xat[trt,] 
+  
+  ## force characteristics of dump-ins to reflect carry-ins
+  xap0 = xap1 
+  
+  ## change the treatment to dump-ins
+  xap0[,1] = FALSE  # switch treatment label TRUE to FALSE
+  
+  ## run BART (wbart for continuous outcomes)
+  library(BART); n.imps = 1000 # number of imputations
+  bart_mod = wbart(x.train = xat, y.train = ya, 
+                   k=2, ntree=100, ndpost=n.imps, 
+                   nskip=500, printevery=100L)
+  
+  ## posterior predictions
+  bart_pred1 = pwbart(xap1, bart_mod$treedraws)
+  bart_pred0 = pwbart(xap0, bart_mod$treedraws)
+  
+  dim(bart_pred0)  
+  
+  
+  # Average treatment effects on the treatment group 1 (ATTs)
+  n1 = nrow(xap1)
+  att10.est.a = NULL
+  for (m in 1:n.imps) {
+    # potential outcomes for treatment group 1
+    y11.hat.a = bart_pred1[m,]
+    y10.hat.a = bart_pred0[m,]
+    
+    # att
+    print(m)
+    att10.est.a[m] = mean(y11.hat.a) - mean(y10.hat.a)
+  }
+  
+  att10.bart = mean(att10.est.a)
+  
+  
+  ## ESTIMATED ATT
+  print(att10.bart)
+  
+  Posterior_Summary = function(RD.est) {
+    # risk difference
+    RD.mean = mean(RD.est)
+    RD.se = sd(RD.est)
+    RD.lower = quantile(RD.est, probs=0.025)
+    RD.upper = quantile(RD.est, probs=0.975)
+    res = tibble(EST = RD.mean, SE = RD.se, LOWER = RD.lower, UPPER = RD.upper)
+    names(res) = c("EST","SE","LOWER","UPPER")
+    return(res)
+  }
+  att10 = Posterior_Summary(att10.est.a)
+  
+  print(att10)
+  
+  df_team_i <- data.frame(team = team_vector[i], est_team = att10.est.a)
+  
+  df_team_all <- bind_rows(df_team_all, df_team_i)
+  
+  summary_table <- rbind(summary_table, cbind(att10.bart, att10))
+  
+} 
+
+
+# plot for entry team distribution of ATT
+
+df_team_all %>%
+  mutate(team_fct = fct_rev(as.factor(team))) %>%
+  ggplot(aes(y= team_fct)) +
+  geom_density_ridges(
+    aes(x=est_team))
+
+df_med <- df_team_all %>% 
+  group_by(team) %>% 
+  summarise(med_team = median(est_team))
+
+df_team_all_1 <- df_team_all %>% inner_join(df_med)
+
+p1 <- df_team_all_1 %>%
+  ggplot(aes(y= fct_reorder(team, med_team), x=est_team)) +
+  geom_density_ridges(color = "white", fill = "#132f3c", quantile_lines = TRUE, quantiles = 2) +
+  scale_y_discrete(expand = c(0.03, 0)) +
+  scale_x_continuous(limits = c(-0.005, 0.04), breaks = seq(0.00, 0.03, 0.01), expand=c(0,0)) +
+  labs(x = "ATT", y = "") +
+  theme_ridges()
+
+p1
+
+
+## defending team distribution of ATT
+
+dteam_vector <- c(unique(df_zone_adj_model$Defending.Team))
+summary_table_d <- NULL
+df_team_i_d <- NULL
+df_team_all_d <- NULL
+
+for(i in 1:length(dteam_vector)) {
+  
+  df_bart <- df_zone_adj_model %>%
+    filter(Defending.Team == dteam_vector[i]) %>%
+    filter(!is.na(GPM_60)) 
+  
+  trt <- df_bart$is_carry    
+  
+  ## x variables are the ones we want to condition on. Factors instead of characters
+  xa <- df_bart %>% 
+    mutate(is_defender = as.numeric(Position == "Defenseman")) %>% 
+    dplyr::select(is_defender, GPM_60, score_diff, length_of_shift, 
+                  game_seconds, x_entry, y_entry) 
+  
+  ## outcome variable
+  ya <- df_bart$xg_30_net 
+  
+  ## combining treatment variable with x
+  xat = cbind(trt, xa) 
+  
+  ## among all entries, select carry-ins
+  xap1 = xat[trt,] 
+  
+  ## force characteristics of dump-ins to reflect carry-ins
+  xap0 = xap1 
+  
+  ## change the treatment to dump-ins
+  xap0[,1] = FALSE  # switch treatment label TRUE to FALSE
+  
+  ## run BART (wbart for continuous outcomes)
+  library(BART); n.imps = 1000 # number of imputations
+  bart_mod = wbart(x.train = xat, y.train = ya, 
+                   k=2, ntree=100, ndpost=n.imps, 
+                   nskip=500, printevery=100L)
+  
+  ## posterior predictions
+  bart_pred1 = pwbart(xap1, bart_mod$treedraws)
+  bart_pred0 = pwbart(xap0, bart_mod$treedraws)
+  
+  dim(bart_pred0)  
+  
+  
+  # Average treatment effects on the treatment group 1 (ATTs)
+  n1 = nrow(xap1)
+  att10.est.a = NULL
+  for (m in 1:n.imps) {
+    # potential outcomes for treatment group 1
+    y11.hat.a = bart_pred1[m,]
+    y10.hat.a = bart_pred0[m,]
+    
+    # att
+    print(m)
+    att10.est.a[m] = mean(y11.hat.a) - mean(y10.hat.a)
+  }
+  
+  att10.bart = mean(att10.est.a)
+  
+  
+  ## ESTIMATED ATT
+  print(att10.bart)
+  
+  Posterior_Summary = function(RD.est) {
+    # risk difference
+    RD.mean = mean(RD.est)
+    RD.se = sd(RD.est)
+    RD.lower = quantile(RD.est, probs=0.025)
+    RD.upper = quantile(RD.est, probs=0.975)
+    res = tibble(EST = RD.mean, SE = RD.se, LOWER = RD.lower, UPPER = RD.upper)
+    names(res) = c("EST","SE","LOWER","UPPER")
+    return(res)
+  }
+  att10 = Posterior_Summary(att10.est.a)
+  
+  print(att10)
+  
+  df_team_i_d <- data.frame(team = dteam_vector[i], est_team = att10.est.a)
+  
+  df_team_all_d <- bind_rows(df_team_all_d, df_team_i_d)
+  
+  summary_table_d <- rbind(summary_table_d, cbind(att10.bart, att10))
+  
+  
+} 
+
+
+# plot for defending team
+df_team_all_d %>%
+  mutate(team_fct = fct_rev(as.factor(team))) %>%
+  ggplot(aes(y= team_fct)) +
+  geom_density_ridges(
+    aes(x=est_team))
+
+df_med_d <- df_team_all_d %>% 
+  group_by(team) %>% 
+  summarise(med_team = median(est_team))
+
+df_team_all_1_d <- df_team_all_d %>% inner_join(df_med_d)
+
+p2 <- df_team_all_1_d %>%
+  ggplot(aes(y= fct_reorder(team, med_team), x=est_team)) +
+  geom_density_ridges(color = "white", fill = "#132f3c", quantile_lines = TRUE, quantiles = 2) +
+  scale_y_discrete(expand = c(0.03, 0)) +
+  scale_x_continuous(limits = c(-0.005, 0.04), breaks = seq(0.00, 0.03, 0.01), expand=c(0,0)) +
+  labs(
+    x = "ATT", 
+    y = "",
+    title = "Defending Team Distribution of ATT"
+  ) +
+  theme_ridges()
+
+p2
+
+plot_grid(p1, p3)
